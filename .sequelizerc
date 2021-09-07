@@ -1,0 +1,17 @@
+const config = require('./config');
+
+const dialect = config.database.dialect;
+const username = config.database.username;
+const password = config.database.password;
+const host = config.database.host;
+const port = config.database.port;
+const storage = config.database.storage;
+const database = config.database.database;
+
+const url = dialect === 'sqlite'
+  ? `${dialect}:${storage}`
+  : `${dialect}://${username}:${password}@${host}:${port}/${database}`;
+
+module.exports = {
+  'url': url
+};
