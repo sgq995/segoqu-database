@@ -18,6 +18,7 @@ const config = {
   }
 }
 
-config[process.env.NODE_ENV] = config['database'];
+// HACK: Make sequelize to get the correct values
+config[process.env.NODE_ENV || 'development'] = config['database'];
 
 module.exports = config;
