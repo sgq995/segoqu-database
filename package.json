@@ -1,0 +1,24 @@
+{
+  "name": "segoqu-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sebastian Gonzalez Quintero <sgq995@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mariadb": "^2.5.4",
+    "mysql2": "^2.3.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5",
+    "sqlite3": "^4.2.0",
+    "tedious": "^6.2.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  }
+}
