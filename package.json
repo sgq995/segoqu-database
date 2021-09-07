@@ -1,15 +1,16 @@
 {
-  "name": "segoqu-database",
+  "name": "@segoqu/database",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate": "npx sequelize-cli db:migrate:all"
   },
   "keywords": [],
   "author": "Sebastian Gonzalez Quintero <sgq995@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "mariadb": "^2.5.4",
     "mysql2": "^2.3.0",
     "pg": "^8.7.1",
