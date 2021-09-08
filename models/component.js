@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Component.belongsToMany(models['Prop'], {
+      Component.associations['Prop'] = Component.belongsToMany(models['Prop'], {
         through: 'components_props',
         foreignKey: 'component_tag',
         otherKey: 'prop_name',
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Component',
+    modelName: 'component',
     tableName: 'components',
     timestamps: false,
   });

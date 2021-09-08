@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      ContentProp.belongsTo(models['Content'], {
+      ContentProp.associations['Content'] = ContentProp.belongsTo(models['Content'], {
         foreignKey: 'content_id',
       });
 
-      ContentProp.belongsTo(models['Prop'], {
+      ContentProp.associations['Prop'] = ContentProp.belongsTo(models['Prop'], {
         foreignKey: 'prop_name',
       })
     }
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'ContentProp',
+    modelName: 'contentProp',
     tableName: 'contents_props',
     timestamps: false,
   });

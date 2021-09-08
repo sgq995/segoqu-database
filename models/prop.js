@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Prop.belongsToMany(models['Component'], {
+      Prop.associations['Component'] = Prop.belongsToMany(models['Component'], {
         through: 'components_props',
         foreignKey: 'prop_name',
         otherKey: 'component_tag',
         timestamps: false,
       });
 
-      Prop.hasMany(models['ContentProp'], {
+      Prop.associations['ContentProp'] = Prop.hasMany(models['ContentProp'], {
         foreignKey: 'prop_name',
       });
     }
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Prop',
+    modelName: 'prop',
     tableName: 'props',
     timestamps: false,
   });

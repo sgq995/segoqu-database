@@ -1,4 +1,8 @@
 import {
+  Sequelize,
+  DataTypes,
+  Model,
+  Optional,
   HasManyAddAssociationMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
@@ -22,22 +26,16 @@ import {
   BelongsToManyRemoveAssociationMixin,
   BelongsToManyRemoveAssociationsMixin,
   BelongsToManyCreateAssociationMixin,
+  HasMany,
+  BelongsToMany,
+  BelongsTo,
 } from "sequelize";
-import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 // category.js
 interface CategoryAttributes {
   id: number,
   label: string,
 }
-fooInstance.hasBar()
-fooInstance.hasBars()
-fooInstance.setBars()
-fooInstance.addBar()
-fooInstance.addBars()
-fooInstance.removeBar()
-fooInstance.removeBars()
-fooInstance.createBar()
 
 interface CategoryCreationAttributes extends Optional<CategoryAttributes, "id"> { }
 
@@ -57,6 +55,12 @@ export class Category
   public removePost!: HasManyRemoveAssociationMixin<Post, number>;
   public removePosts!: HasManyRemoveAssociationsMixin<Post, number>;
   public createPost!: HasManyCreateAssociationMixin<Post>;
+
+  public readonly posts?: Post[];
+
+  public static associations: {
+    Post: HasMany<Category, Post>,
+  }
 }
 
 // component.js
@@ -79,6 +83,12 @@ export class Component
   public removeProp!: BelongsToManyRemoveAssociationMixin<Prop, string>;
   public removeProps!: BelongsToManyRemoveAssociationsMixin<Prop, string>;
   public createProp!: BelongsToManyCreateAssociationMixin<Prop>;
+
+  public readonly props?: Prop[];
+
+  public static associations: {
+    Prop: BelongsToMany<Component, Prop>,
+  }
 }
 
 // content.js
@@ -103,9 +113,13 @@ export class Content
   public setPost!: BelongsToSetAssociationMixin<Post, number>;
   public createPost!: BelongsToCreateAssociationMixin<Post>;
 
+  public readonly post?: Post;
+
   public getComponent!: BelongsToGetAssociationMixin<Component>;
   public setComponent!: BelongsToSetAssociationMixin<Component, string>;
   public createComponent!: BelongsToCreateAssociationMixin<Component>;
+
+  public readonly component?: Component;
 
   public getContentProps!: HasManyGetAssociationsMixin<ContentProp>;
   public countContentProps!: HasManyCountAssociationsMixin;
@@ -117,6 +131,14 @@ export class Content
   public removeContentProp!: HasManyRemoveAssociationMixin<ContentProp, number>;
   public removeContentProps!: HasManyRemoveAssociationsMixin<ContentProp, number>;
   public createContentProp!: HasManyCreateAssociationMixin<ContentProp>;
+
+  public readonly contentProps?: ContentProp[];
+
+  public static associations: {
+    Post: BelongsTo<Content, Post>,
+    Component: BelongsTo<Content, Component>,
+    ContentProp: HasMany<Content, ContentProp>,
+  }
 }
 
 // contentprop.js
@@ -141,9 +163,18 @@ export class ContentProp
   public setContent!: BelongsToSetAssociationMixin<Content, number>;
   public createContent!: BelongsToCreateAssociationMixin<Content>;
 
+  public readonly content?: Content;
+
   public getProp!: BelongsToGetAssociationMixin<Prop>;
   public setProp!: BelongsToSetAssociationMixin<Prop, number>;
   public createProp!: BelongsToCreateAssociationMixin<Prop>;
+
+  public readonly prop?: Prop;
+
+  public static associations: {
+    Content: BelongsTo<ContentProp, Content>,
+    Prop: BelongsTo<ContentProp, Content>,
+  }
 }
 
 // post.js
@@ -170,6 +201,8 @@ export class Post
   public setCategory!: BelongsToSetAssociationMixin<Category, number>;
   public createCategory!: BelongsToCreateAssociationMixin<Category>;
 
+  public readonly category?: Category;
+
   public getTags!: BelongsToManyGetAssociationsMixin<Tag>;
   public countTags!: BelongsToManyCountAssociationsMixin;
   public hasTag!: BelongsToManyHasAssociationMixin<Tag, number>;
@@ -181,6 +214,8 @@ export class Post
   public removeTags!: BelongsToManyRemoveAssociationsMixin<Tag, number>;
   public createTag!: BelongsToManyCreateAssociationMixin<Tag>;
 
+  public readonly tags?: Tag[];
+
   public getContents!: HasManyGetAssociationsMixin<Content>;
   public countContents!: HasManyCountAssociationsMixin;
   public hasContent!: HasManyHasAssociationMixin<Content, number>;
@@ -191,6 +226,14 @@ export class Post
   public removeContent!: HasManyRemoveAssociationMixin<Content, number>;
   public removeContents!: HasManyRemoveAssociationsMixin<Content, number>;
   public createContent!: HasManyCreateAssociationMixin<Content>;
+
+  public readonly contents?: Content[];
+
+  public static associations: {
+    Category: BelongsTo<Post, Category>,
+    Tag: BelongsToMany<Post, Tag>,
+    Content: HasMany<Post, Content>,
+  }
 }
 
 // prop.js
@@ -214,6 +257,8 @@ export class Prop
   public removeComponents!: BelongsToManyRemoveAssociationsMixin<Component, string>;
   public createComponent!: BelongsToManyCreateAssociationMixin<Component>;
 
+  public readonly components?: Component[];
+
   public getContentProps!: HasManyGetAssociationsMixin<ContentProp>;
   public countContentProps!: HasManyCountAssociationsMixin;
   public hasContentProp!: HasManyHasAssociationMixin<ContentProp, string>;
@@ -224,6 +269,13 @@ export class Prop
   public removeContentProp!: HasManyRemoveAssociationMixin<ContentProp, string>;
   public removeContentProps!: HasManyRemoveAssociationsMixin<ContentProp, string>;
   public createContentProp!: HasManyCreateAssociationMixin<ContentProp>;
+
+  public readonly contentProps?: ContentProp[];
+
+  public static associations: {
+    Component: BelongsToMany<Prop, Component>,
+    ContentProp: HasMany<Prop, ContentProp>,
+  }
 }
 
 // tag.js
@@ -243,11 +295,17 @@ export class Tag
   public getPosts!: BelongsToManyGetAssociationsMixin<Post>;
   public countPosts!: BelongsToManyCountAssociationsMixin;
   public hasPost!: BelongsToManyHasAssociationMixin<Post, number>;
-  public hasPosts!: BelongsToManyHasAssociationsMixin<Post, number>;
+  public hasPosts!: BelongsToMaContentPropnyHasAssociationsMixin<Post, number>;
   public setPosts!: BelongsToManySetAssociationsMixin<Post, number>;
   public addPost!: BelongsToManyAddAssociationMixin<Post, number>;
   public addPosts!: BelongsToManyAddAssociationsMixin<Post, number>;
   public removePost!: BelongsToManyRemoveAssociationMixin<Post, number>;
   public removePosts!: BelongsToManyRemoveAssociationsMixin<Post, number>;
   public createPost!: BelongsToManyCreateAssociationMixin<Post>;
+
+  public readonly posts?: Post[];
+
+  public static associations: {
+    Post: BelongsToMany<Tag, Post>,
+  }
 }

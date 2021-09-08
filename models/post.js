@@ -12,18 +12,18 @@ function PostHelper(sequelize, DataTypes) {
      * @param {Object.<string, Model>} models 
      */
     static associate(models) {
-      Post.belongsTo(models['Category'], {
+      Post.associations['Category'] = Post.belongsTo(models['Category'], {
         foreignKey: 'category_id',
       });
 
-      Post.belongsToMany(models['Tag'], {
+      Post.associations['Tag'] = Post.belongsToMany(models['Tag'], {
         through: 'posts_tags',
         foreignKey: 'post_id',
         otherKey: 'tag_id',
         timestamps: false,
       });
 
-      Post.hasMany(models['Content'], {
+      Post.associations['Content'] = Post.hasMany(models['Content'], {
         foreignKey: 'post_id',
       });
     }
@@ -63,7 +63,7 @@ function PostHelper(sequelize, DataTypes) {
     },
   }, {
     sequelize,
-    modelName: 'Post',
+    modelName: 'post',
     tableName: 'posts',
     timestamps: false,
     // createdAt: 'created_at',
